@@ -22,15 +22,9 @@ A Flvx app is composed of the following pieces:
 
 # Usage
 
-Coming Soon!
-
-# API
-
-Coming Soon!
-
-# Installation
-
-Coming Soon!
+Coming Soon! In the mean time, check out the example. A built version of the example, ready to be loaded in a browser, is
+available in the [example-dist](example-dist) directory. Note that everything is written in ECMAScript 6, and compiled back
+to ECMAScript 5 using [Traceur](https://github.com/google/traceur-compiler/wiki/GettingStarted) and [Gulp](http://gulpjs.com/).
 
 License
 =======

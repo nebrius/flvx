@@ -29,7 +29,7 @@ var rename = require("gulp-rename");
 var del = require('del');
 
 gulp.task('default', ['clean'], function() {
-  return gulp.start(['amd', 'amd-min', 'commonjs', 'commonjs-min']);
+  return gulp.start(['amd', 'amd-min', 'commonjs', 'commonjs-min', 'index.html', 'libs', 'js']);
 });
 
 gulp.task('amd', function() {
@@ -78,6 +78,25 @@ gulp.task('commonjs-min', function() {
         path.extname = '.commonjs.min.js';
     }))
     .pipe(gulp.dest('dist'));
+});
+
+gulp.task('index.html', function() {
+  return gulp.src('example/index.html')
+    .pipe(gulp.dest('example-dist'));
+});
+
+gulp.task('libs', function() {
+  return gulp.src('example/lib/*')
+    .pipe(gulp.dest('example-dist/lib'));
+});
+
+gulp.task('js', function() {
+  return gulp.src('example/js/**/*')
+    .pipe(traceur({
+      experimental: true,
+      modules: 'amd'
+    }))
+    .pipe(gulp.dest('example-dist/js'));
 });
 
 gulp.task('clean', function(cb) {

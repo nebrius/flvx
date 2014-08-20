@@ -24,41 +24,74 @@ THE SOFTWARE.
 
 let storeController = Symbol();
 let viewController = Symbol();
-let registerStoreController = Symbol();
-let registerViewController = Symbol();
 
-// Aggregator
+/***********************
+ * Store Controller    *
+ ***********************/
+
+export class StoreController {
+  trigger() {
+    throw new Error('"trigger" must be implemented by a derived store controller');
+  }
+  render() {
+    throw new Error('"render" must be implemented by a derived store controller');
+  }
+  onConnected() {}
+  onDisconnected() {}
+}
+
+/***********************
+ * Store               *
+ ***********************/
+
+export class Store {
+  trigger() {
+    throw new Error('"trigger" must be implemented by a derived store');
+  }
+  render() {
+    throw new Error('"render" must be implemented by a derived store');
+  }
+  onConnected() {}
+  onDisconnected() {}
+}
+
+/***********************
+ * View Controller     *
+ ***********************/
+
+export class ViewController {
+  render() {
+    throw new Error('"render" must be implemented by a derived view controller');
+  }
+  onConnected() {}
+  onDisconnected() {}
+}
+
+/***********************
+ * Aggregator          *
+ ***********************/
 
 class Aggregator {
-  constructor() {
-    this[registerStoreController] = (vc) => {
-      this[storeController] = vc;
-    };
-    this[registerViewController] = (vc) => {
-      this[viewController] = vc;
-    };
-  }
   update() {
     this[viewController].render(this[storeController].render());
   }
 }
 export let aggregator = new Aggregator();
 
-// Dispatcher
+/***********************
+ * Dispatcher          *
+ ***********************/
 
 class Dispatcher {
-  constructor() {
-    this[registerStoreController] = (vc) => {
-      this[storeController] = vc;
-    };
-  }
   trigger(event) {
     this[storeController].trigger(event);
   }
 }
 export let dispatcher = new Dispatcher();
 
-// Router
+/***********************
+ * Router              *
+ ***********************/
 
 let routes = Symbol();
 
@@ -67,6 +100,12 @@ class Router {
     this[routes] = {};
   }
   registerRoute(name, options) {
+    if (!(options.storeController instanceof StoreController)) {
+      throw new Error('Invalid store controller');
+    }
+    if (!(options.viewController instanceof ViewController)) {
+      throw new Error('Invalid view controller');
+    }
     this[routes][name] = options;
   }
   route(newRoute) {
@@ -75,19 +114,19 @@ class Router {
       throw new Error('Unknown route "' + newRoute + '"');
     }
 
-    var storeController = new routeOptions.storeController();
-    var viewController = new routeOptions.viewController();
+    if (aggregator[storeController]) {
+      aggregator[storeController].onDisconnected();
+      aggregator[viewController].onDisconnected();
+    }
 
-    aggregator[registerStoreController](storeController);
-    aggregator[registerViewController](viewController);
+    aggregator[storeController] = routeOptions.storeController;
+    aggregator[viewController] = routeOptions.viewController;
 
-    dispatcher[registerStoreController](storeController);
+    dispatcher[storeController] = routeOptions.storeController;
 
-    viewController.onConnected && viewController.onConnected();
-    storeController.onConnected && storeController.onConnected();
+    routeOptions.storeController.onConnected();
+    routeOptions.storeController.onConnected();
   }
 }
 
 export let router = new Router();
-
-//

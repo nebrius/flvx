@@ -69,7 +69,7 @@ define([], function() {
       $traceurRuntime.setProperty(aggregator, viewController, routeOptions.viewController);
       $traceurRuntime.setProperty(dispatcher, storeController, routeOptions.storeController);
       routeOptions.viewController.onConnected();
-      routeOptions.storeController.onConnected(data);
+      routeOptions.storeController.onConnected(data || {});
     }
   }, {});
   var router = new Router();

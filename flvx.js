@@ -125,7 +125,7 @@ class Router {
     dispatcher[storeController] = routeOptions.storeController;
 
     routeOptions.viewController.onConnected();
-    routeOptions.storeController.onConnected(data);
+    routeOptions.storeController.onConnected(data || {});
   }
 }
 

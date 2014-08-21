@@ -108,7 +108,7 @@ class Router {
     }
     this[routes][name] = options;
   }
-  route(newRoute) {
+  route(newRoute, data) {
     let routeOptions = this[routes][newRoute];
     if (!routeOptions) {
       throw new Error('Unknown route "' + newRoute + '"');
@@ -125,7 +125,7 @@ class Router {
     dispatcher[storeController] = routeOptions.storeController;
 
     routeOptions.viewController.onConnected();
-    routeOptions.storeController.onConnected();
+    routeOptions.storeController.onConnected(data);
   }
 }
 

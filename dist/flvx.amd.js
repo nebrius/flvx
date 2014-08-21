@@ -56,7 +56,7 @@ define([], function() {
       }
       $traceurRuntime.setProperty(this[$traceurRuntime.toProperty(routes)], name, options);
     },
-    route: function(newRoute) {
+    route: function(newRoute, data) {
       var routeOptions = this[$traceurRuntime.toProperty(routes)][$traceurRuntime.toProperty(newRoute)];
       if (!routeOptions) {
         throw new Error('Unknown route "' + newRoute + '"');
@@ -69,7 +69,7 @@ define([], function() {
       $traceurRuntime.setProperty(aggregator, viewController, routeOptions.viewController);
       $traceurRuntime.setProperty(dispatcher, storeController, routeOptions.storeController);
       routeOptions.viewController.onConnected();
-      routeOptions.storeController.onConnected();
+      routeOptions.storeController.onConnected(data);
     }
   }, {});
   var router = new Router();

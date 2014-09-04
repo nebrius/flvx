@@ -100,6 +100,7 @@ function route(name, state) {
   if (!nextRoute) {
     throw new Error('Unknown route "' + route + '"');
   }
+  state = state || {};
   if (currentStoreController) {
     currentStoreController.onDisconnected();
   }

@@ -22,16 +22,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-let storeController = Symbol();
-let viewController = Symbol();
-
 /***********************
- * Store Controller    *
+ * Types               *
  ***********************/
 
 export class StoreController {
-  trigger() {
-    throw new Error('"trigger" must be implemented by a derived store controller');
+  dispatch() {
+    throw new Error('"dispatch" must be implemented by a derived store controller');
   }
   render() {
     throw new Error('"render" must be implemented by a derived store controller');
@@ -40,13 +37,9 @@ export class StoreController {
   onDisconnected() {}
 }
 
-/***********************
- * Store               *
- ***********************/
-
 export class Store {
-  trigger() {
-    throw new Error('"trigger" must be implemented by a derived store');
+  dispatch() {
+    throw new Error('"dispatch" must be implemented by a derived store');
   }
   render() {
     throw new Error('"render" must be implemented by a derived store');
@@ -54,10 +47,6 @@ export class Store {
   onConnected() {}
   onDisconnected() {}
 }
-
-/***********************
- * View Controller     *
- ***********************/
 
 export class ViewController {
   render() {
@@ -67,66 +56,76 @@ export class ViewController {
   onDisconnected() {}
 }
 
-/***********************
- * Aggregator          *
- ***********************/
-
-class Aggregator {
-  update() {
-    this[viewController].render(this[storeController].render());
+export class LinkController {
+  dispatch() {
+    throw new Error('"dispatch" must be implemented by a derived link controller');
   }
-}
-export let aggregator = new Aggregator();
-
-/***********************
- * Dispatcher          *
- ***********************/
-
-class Dispatcher {
-  trigger(event) {
-    this[storeController].trigger(event);
-  }
-}
-export let dispatcher = new Dispatcher();
-
-/***********************
- * Router              *
- ***********************/
-
-let routes = Symbol();
-
-class Router {
-  constructor() {
-    this[routes] = {};
-  }
-  registerRoute(name, options) {
-    if (!(options.storeController instanceof StoreController)) {
-      throw new Error('Invalid store controller');
-    }
-    if (!(options.viewController instanceof ViewController)) {
-      throw new Error('Invalid view controller');
-    }
-    this[routes][name] = options;
-  }
-  route(newRoute, data) {
-    let routeOptions = this[routes][newRoute];
-    if (!routeOptions) {
-      throw new Error('Unknown route "' + newRoute + '"');
-    }
-
-    if (aggregator[storeController]) {
-      aggregator[storeController].onDisconnected();
-      aggregator[viewController].onDisconnected();
-    }
-
-    aggregator[storeController] = routeOptions.storeController;
-    aggregator[viewController] = routeOptions.viewController;
-
-    dispatcher[storeController] = routeOptions.storeController;
-
-    routeOptions.viewController.onConnected();
-    routeOptions.storeController.onConnected(data || {});
-  }
+  onConnected() {}
+  onDisconnected() {}
 }
 
-export let router = new Router();
+/***********************
+ * Methods             *
+ ***********************/
+
+let currentStoreController = null;
+let currentViewController = null;
+let currentLinkController = null;
+let routes = {};
+
+export function aggregate() {
+  if (!currentViewController) {
+    throw new Error('"aggregate" called before first route');
+  }
+  currentViewController.render(currentStoreController.render());
+}
+
+export function dispatch(action) {
+  if (!currentStoreController) {
+    throw new Error('"dispatch" called before first route');
+  }
+  if (currentLinkController) {
+    currentLinkController.dispatch(action);
+  }
+  currentStoreController.dispatch(action);
+}
+
+export function registerRoute(name, options) {
+  if (!(options.storeController instanceof StoreController)) {
+    throw new Error('Invalid store controller');
+  }
+  if (!(options.viewController instanceof ViewController)) {
+    throw new Error('Invalid view controller');
+  }
+  if (options.linkController && !(options.linkController instanceof LinkController)) {
+    throw new Error('Invalid link controller');
+  }
+  routes[name] = options;
+}
+
+export function route(name, state) {
+  let nextRoute = routes[name];
+  if (!nextRoute) {
+    throw new Error('Unknown route "' + route + '"');
+  }
+
+  if (currentStoreController) {
+    currentStoreController.onDisconnected();
+  }
+  if (currentLinkController) {
+    currentLinkController.onDisconnected();
+  }
+  if (currentViewController) {
+    currentViewController.onDisconnected();
+  }
+
+  currentStoreController = nextRoute.storeController;
+  currentLinkController = nextRoute.linkController;
+  currentViewController = nextRoute.viewController;
+
+  currentStoreController.onConnected(state);
+  if (currentLinkController) {
+    currentLinkController.onConnected();
+  }
+  currentViewController.onConnected();
+}

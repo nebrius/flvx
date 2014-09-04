@@ -29,8 +29,8 @@ let store = Symbol();
 
 export class MyStoreController extends StoreController {
 
-  trigger(event) {
-    this[store].trigger(event);
+  dispatch(action) {
+    this[store].dispatch(action);
   }
 
   render() {

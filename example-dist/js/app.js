@@ -6,13 +6,15 @@ define(['flvx', 'store_controllers/MyStoreController', 'view_controllers/MyViewC
     $__2 = {default: $__2};
   if (!$__4 || !$__4.__esModule)
     $__4 = {default: $__4};
-  var router = $__0.router;
+  var $__1 = $__0,
+      registerRoute = $__1.registerRoute,
+      route = $__1.route;
   var MyStoreController = $__2.MyStoreController;
   var MyViewController = $__4.MyViewController;
-  router.registerRoute('myroute', {
+  registerRoute('myroute', {
     storeController: new MyStoreController(),
     viewController: new MyViewController()
   });
-  router.route('myroute');
+  route('myroute');
   return {};
 });

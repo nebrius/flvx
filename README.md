@@ -16,9 +16,14 @@ A Flvx app is composed of the following pieces:
 - view controllers - A single controller that oversees the React components.
 - stores - A set of pieces that store state. These can be Backbone Models, custom written code, etc.
 - store controller - A single controller that oversees the stores.
-- dispatcher - A single piece that receives events from views and propagates them to the store controller
-- aggregator - A single piece that recieves updates from the stores and propagates them to the view controller
-- router - A single piece that wires up view controllers and store controllers to the dispatcher and aggregator. Can be supplemented with a Backbone router, etc.
+- link controller - A single controller that oversees all connections between a server and the app. This is the only asynchronous piece in Flvx.
+- dispatcher - A method that receives events from views and propagates them to the store controller
+- aggregator - A method that receives updates from the stores and propagates them to the view controller
+- router - A pair of methods that wires up view controllers and store controllers to the dispatcher and aggregator. Can be supplemented with a Backbone router, etc.
+
+The relationship and data flow between pieces is shown below:
+
+![Flvx Architecture](https://theoreticalideations.com/static/flvx.png)
 
 # Usage
 

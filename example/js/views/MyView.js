@@ -23,13 +23,13 @@ THE SOFTWARE.
 */
 
 import React from 'react';
-import { dispatcher } from 'flvx';
+import { dispatch } from 'flvx';
 
 export let MyView = React.createClass({
   render() {
     return new React.DOM.div({
       onClick: () => {
-        dispatcher.trigger({
+        dispatch({
           type: 'REQUEST_NEW_MESSAGE'
         });
       },

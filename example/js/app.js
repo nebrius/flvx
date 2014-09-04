@@ -22,13 +22,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-import { router } from 'flvx';
+import { registerRoute, route } from 'flvx';
 import { MyStoreController } from 'store_controllers/MyStoreController';
 import { MyViewController } from 'view_controllers/MyViewController';
 
-router.registerRoute('myroute', {
+registerRoute('myroute', {
   storeController: new MyStoreController(),
   viewController: new MyViewController()
 });
 
-router.route('myroute');
+route('myroute');

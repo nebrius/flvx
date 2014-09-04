@@ -22,8 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-import { Store, aggregator } from 'flvx';
-import { router } from 'flvx';
+import { Store, aggregate } from 'flvx';
 
 let MESSAGES = ['Hello', 'Salut', 'Hola', 'Hallo', 'Привет', '你好', 'こんにちは'];
 let currentMessage = Symbol();
@@ -34,14 +33,14 @@ export class MyStore extends Store {
     this[currentMessage] = 0;
   }
 
-  trigger(event) {
-    switch(event.type) {
+  dispatch(action) {
+    switch(action.type) {
       case 'REQUEST_NEW_MESSAGE':
         this[currentMessage]++;
         if (this[currentMessage] == MESSAGES.length) {
           this[currentMessage] = 0;
         }
-        aggregator.update();
+        aggregate();
         break;
     }
   }
@@ -53,7 +52,7 @@ export class MyStore extends Store {
   }
 
   onConnected() {
-    aggregator.update();
+    aggregate();
   }
 
 }

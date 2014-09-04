@@ -12,8 +12,8 @@ define(['flvx', 'stores/MyStore'], function($__0,$__2) {
   };
   var $MyStoreController = MyStoreController;
   ($traceurRuntime.createClass)(MyStoreController, {
-    trigger: function(event) {
-      this[$traceurRuntime.toProperty(store)].trigger(event);
+    dispatch: function(action) {
+      this[$traceurRuntime.toProperty(store)].dispatch(action);
     },
     render: function() {
       return this[$traceurRuntime.toProperty(store)].render();

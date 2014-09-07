@@ -29,17 +29,12 @@ let store = Symbol();
 
 export class MyStoreController extends StoreController {
 
-  dispatch(action) {
-    this[store].dispatch(action);
+  constructor() {
+    this.register(this[store] = new MyStore());
   }
 
   render() {
     return this[store].render();
-  }
-
-  onConnected() {
-    this[store] = new MyStore();
-    this[store].onConnected();
   }
 
 }

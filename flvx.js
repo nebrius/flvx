@@ -26,42 +26,67 @@ THE SOFTWARE.
  * Types               *
  ***********************/
 
-export class StoreController {
-  dispatch() {
-    throw new Error('"dispatch" must be implemented by a derived store controller');
+let children = Symbol();
+let internalDispatch = Symbol();
+let internalOnConnected = Symbol();
+let internalOnDisconnected = Symbol();
+
+class Dispatchable {
+  [internalDispatch](action) {
+    this.dispatch(action);
+    if (this[children]) {
+      for (let child of this[children]) {
+        child[internalDispatch](action);
+      }
+    }
   }
-  render() {
-    throw new Error('"render" must be implemented by a derived store controller');
+  [internalOnConnected](action) {
+    this.onConnected(action);
+    if (this[children]) {
+      for (let child of this[children]) {
+        child[internalOnConnected](action);
+      }
+    }
   }
+  [internalOnDisconnected](action) {
+    this.onDisconnected(action);
+    if (this[children]) {
+      for (let child of this[children]) {
+        child[internalOnDisconnected](action);
+      }
+    }
+  }
+  register(child) {
+    if (!this[children]) {
+      this[children] = [];
+    }
+    this[children].push(child);
+  }
+  dispatch() {}
   onConnected() {}
   onDisconnected() {}
 }
 
-export class Store {
-  dispatch() {
-    throw new Error('"dispatch" must be implemented by a derived store');
+export class StoreController extends Dispatchable {
+  render() {
+    throw new Error('"render" must be implemented by a derived store controller');
   }
+}
+
+export class Store extends Dispatchable {
   render() {
     throw new Error('"render" must be implemented by a derived store');
   }
-  onConnected() {}
-  onDisconnected() {}
 }
+
+export class LinkController extends Dispatchable {}
+
+export class Link extends Dispatchable {}
 
 export class ViewController {
   render() {
     throw new Error('"render" must be implemented by a derived view controller');
   }
-  onConnected() {}
-  onDisconnected() {}
-}
-
-export class LinkController {
-  dispatch() {
-    throw new Error('"dispatch" must be implemented by a derived link controller');
-  }
-  onConnected() {}
-  onDisconnected() {}
 }
 
 /***********************
@@ -85,9 +110,9 @@ export function dispatch(action) {
     throw new Error('"dispatch" called before first route');
   }
   if (currentLinkController) {
-    currentLinkController.dispatch(action);
+    currentLinkController[internalDispatch](action);
   }
-  currentStoreController.dispatch(action);
+  currentStoreController[internalDispatch](action);
 }
 
 export function registerRoute(name, options) {
@@ -111,22 +136,18 @@ export function route(name, state) {
   state = state || {};
 
   if (currentStoreController) {
-    currentStoreController.onDisconnected();
+    currentStoreController[internalOnDisconnected]();
   }
   if (currentLinkController) {
-    currentLinkController.onDisconnected();
-  }
-  if (currentViewController) {
-    currentViewController.onDisconnected();
+    currentLinkController[internalOnDisconnected]();
   }
 
   currentStoreController = nextRoute.storeController;
   currentLinkController = nextRoute.linkController;
   currentViewController = nextRoute.viewController;
 
-  currentStoreController.onConnected(state);
+  currentStoreController[internalOnConnected](state);
   if (currentLinkController) {
-    currentLinkController.onConnected();
+    currentLinkController[internalOnConnected]();
   }
-  currentViewController.onConnected();
 }

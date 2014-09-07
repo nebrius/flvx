@@ -5,21 +5,26 @@ A lightweight web framework derived from Facebook's [Flux](http://facebook.githu
 application architecture and is intended to be used with Facebook's [React](http://facebook.github.io/react/) UI library.
 
 Flvx modifies the Flux paradigm slightly to give it a little more structure, and to help enforce the immutable nature
-of the Flux philosophy.
+of the Flux philosophy. Flvx is written in ECMAScript 6 and can be used directly, or can be compiled to AMD or CommonJS
+compatible ECMAScript 5 code.
 
 # Overview
 
 Flvx is an alternative to traditional MVC architectures that features unidirectional data flow and immutable pieces.
-A Flvx app is composed of the following pieces:
+A Flvx app is composed of a variety of pieces. Flvx provides the following pre-built pieces out of the box:
+
+- dispatcher - A method that receives events from views and propagates them to the store controller
+- aggregator - A method that receives updates from the stores and propagates them to the view controller
+- router - A pair of methods that wires up view controllers and store controllers to the dispatcher and aggregator. Can be supplemented with a Backbone router, etc in your main app code.
+
+Flvx provides base classes that you extend to provide functionality for your app:
 
 - views - A set of React components.
 - view controllers - A single controller that oversees the React components.
 - stores - A set of pieces that store state. These can be Backbone Models, custom written code, etc.
 - store controller - A single controller that oversees the stores.
-- link controller - A single controller that oversees all connections between a server and the app. This is the only asynchronous piece in Flvx.
-- dispatcher - A method that receives events from views and propagates them to the store controller
-- aggregator - A method that receives updates from the stores and propagates them to the view controller
-- router - A pair of methods that wires up view controllers and store controllers to the dispatcher and aggregator. Can be supplemented with a Backbone router, etc.
+- links - A set of pieces that communicate with a server. These are the only asynchronous pieces in Flvx.
+- link controller - A single controller that oversees all connections between a server and the app.
 
 The relationship and data flow between pieces is shown below:
 

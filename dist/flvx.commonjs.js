@@ -16,6 +16,12 @@ Object.defineProperties(exports, {
   ViewController: {get: function() {
       return ViewController;
     }},
+  registerGlobalStore: {get: function() {
+      return registerGlobalStore;
+    }},
+  getGlobalData: {get: function() {
+      return getGlobalData;
+    }},
   aggregate: {get: function() {
       return aggregate;
     }},
@@ -27,15 +33,6 @@ Object.defineProperties(exports, {
     }},
   route: {get: function() {
       return route;
-    }},
-  getState: {get: function() {
-      return getState;
-    }},
-  setState: {get: function() {
-      return setState;
-    }},
-  clearState: {get: function() {
-      return clearState;
     }},
   __esModule: {value: true}
 });
@@ -140,26 +137,52 @@ var StoreController = function StoreController() {
   $traceurRuntime.defaultSuperCall(this, $StoreController.prototype, arguments);
 };
 var $StoreController = StoreController;
-($traceurRuntime.createClass)(StoreController, {render: function() {
+($traceurRuntime.createClass)(StoreController, {
+  render: function() {
     throw new Error('"render" must be implemented by a derived store controller');
-  }}, {}, Dispatchable);
+  },
+  register: function(child) {
+    if (!(child instanceof Store)) {
+      throw new Error('Invalid child');
+    }
+    $traceurRuntime.superCall(this, $StoreController.prototype, "register", [child]);
+  }
+}, {}, Dispatchable);
 var Store = function Store() {
   $traceurRuntime.defaultSuperCall(this, $Store.prototype, arguments);
 };
 var $Store = Store;
-($traceurRuntime.createClass)(Store, {render: function() {
+($traceurRuntime.createClass)(Store, {
+  render: function() {
     throw new Error('"render" must be implemented by a derived store');
-  }}, {}, Dispatchable);
+  },
+  register: function(child) {
+    if (!(child instanceof $Store)) {
+      throw new Error('Invalid child');
+    }
+    $traceurRuntime.superCall(this, $Store.prototype, "register", [child]);
+  }
+}, {}, Dispatchable);
 var LinkController = function LinkController() {
   $traceurRuntime.defaultSuperCall(this, $LinkController.prototype, arguments);
 };
 var $LinkController = LinkController;
-($traceurRuntime.createClass)(LinkController, {}, {}, Dispatchable);
+($traceurRuntime.createClass)(LinkController, {register: function(child) {
+    if (!(child instanceof Link)) {
+      throw new Error('Invalid child');
+    }
+    $traceurRuntime.superCall(this, $LinkController.prototype, "register", [child]);
+  }}, {}, Dispatchable);
 var Link = function Link() {
   $traceurRuntime.defaultSuperCall(this, $Link.prototype, arguments);
 };
 var $Link = Link;
-($traceurRuntime.createClass)(Link, {}, {}, Dispatchable);
+($traceurRuntime.createClass)(Link, {register: function(child) {
+    if (!(child instanceof $Link)) {
+      throw new Error('Invalid child');
+    }
+    $traceurRuntime.superCall(this, $Link.prototype, "register", [child]);
+  }}, {}, Dispatchable);
 var ViewController = function ViewController() {};
 ($traceurRuntime.createClass)(ViewController, {render: function() {
     throw new Error('"render" must be implemented by a derived view controller');
@@ -167,7 +190,20 @@ var ViewController = function ViewController() {};
 var currentStoreController = null;
 var currentViewController = null;
 var currentLinkController = null;
+var globalStore = null;
 var routes = {};
+function registerGlobalStore(store) {
+  if (!(store instanceof Store)) {
+    throw new Error('Invalid global store');
+  }
+  globalStore = store;
+}
+function getGlobalData() {
+  if (!globalStore) {
+    throw new Error('No global store set');
+  }
+  return globalStore.render();
+}
 function aggregate() {
   if (!currentViewController) {
     throw new Error('"aggregate" called before first route');
@@ -177,6 +213,9 @@ function aggregate() {
 function dispatch(action) {
   if (!currentStoreController) {
     throw new Error('"dispatch" called before first route');
+  }
+  if (globalStore) {
+    globalStore[$traceurRuntime.toProperty(internalDispatch)](action);
   }
   if (currentLinkController) {
     currentLinkController[$traceurRuntime.toProperty(internalDispatch)](action);
@@ -217,24 +256,5 @@ function route(name, state) {
   dispatch({
     type: 'routed',
     route: name
-  });
-}
-var state = {};
-function getState(property) {
-  return state[$traceurRuntime.toProperty(property)];
-}
-function setState(property, value) {
-  $traceurRuntime.setProperty(state, property, value);
-  dispatch({
-    type: 'stateSet',
-    property: property,
-    value: value
-  });
-}
-function clearState(property) {
-  delete state[$traceurRuntime.toProperty(property)];
-  dispatch({
-    type: 'stateCleared',
-    property: property
   });
 }

@@ -177,16 +177,22 @@ define([], function() {
     currentViewController.render(currentStoreController.render());
   }
   function dispatch(action) {
-    if (!currentStoreController) {
-      throw new Error('"dispatch" called before first route');
-    }
+    var dispatchHappened = false;
     if (globalStore) {
       globalStore[$traceurRuntime.toProperty(internalDispatch)](action);
+      dispatchHappened = true;
     }
     if (currentLinkController) {
       currentLinkController[$traceurRuntime.toProperty(internalDispatch)](action);
+      dispatchHappened = true;
     }
-    currentStoreController[$traceurRuntime.toProperty(internalDispatch)](action);
+    if (currentStoreController) {
+      currentStoreController[$traceurRuntime.toProperty(internalDispatch)](action);
+      dispatchHappened = true;
+    }
+    if (!dispatchHappened) {
+      console.warn('Dispatch called with nothing to dispatch to');
+    }
   }
   function registerRoute(name, options) {
     if (!(options.storeController instanceof StoreController)) {

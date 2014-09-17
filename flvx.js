@@ -148,16 +148,22 @@ export function aggregate() {
 }
 
 export function dispatch(action) {
-  if (!currentStoreController) {
-    throw new Error('"dispatch" called before first route');
-  }
+  let dispatchHappened = false;
   if (globalStore) {
     globalStore[internalDispatch](action);
+    dispatchHappened = true;
   }
   if (currentLinkController) {
     currentLinkController[internalDispatch](action);
+    dispatchHappened = true;
   }
-  currentStoreController[internalDispatch](action);
+  if (currentStoreController) {
+    currentStoreController[internalDispatch](action);
+    dispatchHappened = true;
+  }
+  if (!dispatchHappened) {
+    console.warn('Dispatch called with nothing to dispatch to');
+  }
 }
 
 export function registerRoute(name, options) {

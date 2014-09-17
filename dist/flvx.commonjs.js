@@ -197,6 +197,7 @@ function registerGlobalStore(store) {
     throw new Error('Invalid global store');
   }
   globalStore = store;
+  store.onConnected();
 }
 function getGlobalData() {
   if (!globalStore) {

@@ -130,6 +130,7 @@ export function registerGlobalStore(store) {
     throw new Error('Invalid global store');
   }
   globalStore = store;
+  store.onConnected();
 }
 
 export function getGlobalData() {

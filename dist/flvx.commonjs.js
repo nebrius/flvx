@@ -28,6 +28,15 @@ Object.defineProperties(exports, {
   route: {get: function() {
       return route;
     }},
+  getState: {get: function() {
+      return getState;
+    }},
+  setState: {get: function() {
+      return setState;
+    }},
+  clearState: {get: function() {
+      return clearState;
+    }},
   __esModule: {value: true}
 });
 var children = Symbol();
@@ -208,5 +217,24 @@ function route(name, state) {
   dispatch({
     type: 'routed',
     route: name
+  });
+}
+var state = {};
+function getState(property) {
+  return state[$traceurRuntime.toProperty(property)];
+}
+function setState(property, value) {
+  $traceurRuntime.setProperty(state, property, value);
+  dispatch({
+    type: 'stateSet',
+    property: property,
+    value: value
+  });
+}
+function clearState(property) {
+  delete state[$traceurRuntime.toProperty(property)];
+  dispatch({
+    type: 'stateCleared',
+    property: property
   });
 }

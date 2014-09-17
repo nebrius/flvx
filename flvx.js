@@ -71,17 +71,43 @@ export class StoreController extends Dispatchable {
   render() {
     throw new Error('"render" must be implemented by a derived store controller');
   }
+  register(child) {
+    if (!(child instanceof Store)) {
+      throw new Error('Invalid child');
+    }
+    super.register(child);
+  }
 }
 
 export class Store extends Dispatchable {
   render() {
     throw new Error('"render" must be implemented by a derived store');
   }
+  register(child) {
+    if (!(child instanceof Store)) {
+      throw new Error('Invalid child');
+    }
+    super.register(child);
+  }
 }
 
-export class LinkController extends Dispatchable {}
+export class LinkController extends Dispatchable {
+  register(child) {
+    if (!(child instanceof Link)) {
+      throw new Error('Invalid child');
+    }
+    super.register(child);
+  }
+}
 
-export class Link extends Dispatchable {}
+export class Link extends Dispatchable {
+  register(child) {
+    if (!(child instanceof Link)) {
+      throw new Error('Invalid child');
+    }
+    super.register(child);
+  }
+}
 
 export class ViewController {
   render() {
@@ -96,7 +122,22 @@ export class ViewController {
 let currentStoreController = null;
 let currentViewController = null;
 let currentLinkController = null;
+let globalStore = null;
 let routes = {};
+
+export function registerGlobalStore(store) {
+  if (!(store instanceof Store)) {
+    throw new Error('Invalid global store');
+  }
+  globalStore = store;
+}
+
+export function getGlobalData() {
+  if (!globalStore) {
+    throw new Error('No global store set');
+  }
+  return globalStore.render();
+}
 
 export function aggregate() {
   if (!currentViewController) {
@@ -108,6 +149,9 @@ export function aggregate() {
 export function dispatch(action) {
   if (!currentStoreController) {
     throw new Error('"dispatch" called before first route');
+  }
+  if (globalStore) {
+    globalStore[internalDispatch](action);
   }
   if (currentLinkController) {
     currentLinkController[internalDispatch](action);

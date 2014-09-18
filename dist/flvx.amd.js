@@ -158,11 +158,11 @@ define([], function() {
   var globalStoreController = null;
   var routes = {};
   function registerGlobalStoreController(storeController) {
-    if (!(store instanceof StoreController)) {
+    if (!(storeController instanceof StoreController)) {
       throw new Error('Invalid global store controller');
     }
     globalStoreController = storeController;
-    store.onConnected();
+    storeController.onConnected();
   }
   function getGlobalData() {
     if (!globalStoreController) {
@@ -178,8 +178,8 @@ define([], function() {
   }
   function dispatch(action) {
     var dispatchHappened = false;
-    if (globalStore) {
-      globalStore[$traceurRuntime.toProperty(internalDispatch)](action);
+    if (globalStoreController) {
+      globalStoreController[$traceurRuntime.toProperty(internalDispatch)](action);
       dispatchHappened = true;
     }
     if (currentLinkController) {

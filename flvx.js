@@ -126,11 +126,11 @@ let globalStoreController = null;
 let routes = {};
 
 export function registerGlobalStoreController(storeController) {
-  if (!(store instanceof StoreController)) {
+  if (!(storeController instanceof StoreController)) {
     throw new Error('Invalid global store controller');
   }
   globalStoreController = storeController;
-  store.onConnected();
+  storeController.onConnected();
 }
 
 export function getGlobalData() {
@@ -149,8 +149,8 @@ export function aggregate() {
 
 export function dispatch(action) {
   let dispatchHappened = false;
-  if (globalStore) {
-    globalStore[internalDispatch](action);
+  if (globalStoreController) {
+    globalStoreController[internalDispatch](action);
     dispatchHappened = true;
   }
   if (currentLinkController) {

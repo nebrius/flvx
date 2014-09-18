@@ -155,20 +155,20 @@ define([], function() {
   var currentStoreController = null;
   var currentViewController = null;
   var currentLinkController = null;
-  var globalStore = null;
+  var globalStoreController = null;
   var routes = {};
-  function registerGlobalStore(store) {
-    if (!(store instanceof Store)) {
-      throw new Error('Invalid global store');
+  function registerGlobalStoreController(storeController) {
+    if (!(store instanceof StoreController)) {
+      throw new Error('Invalid global store controller');
     }
-    globalStore = store;
+    globalStoreController = storeController;
     store.onConnected();
   }
   function getGlobalData() {
-    if (!globalStore) {
-      throw new Error('No global store set');
+    if (!globalStoreController) {
+      throw new Error('No global store controller set');
     }
-    return globalStore.render();
+    return globalStoreController.render();
   }
   function aggregate() {
     if (!currentViewController) {
@@ -246,8 +246,8 @@ define([], function() {
     get ViewController() {
       return ViewController;
     },
-    get registerGlobalStore() {
-      return registerGlobalStore;
+    get registerGlobalStoreController() {
+      return registerGlobalStoreController;
     },
     get getGlobalData() {
       return getGlobalData;

@@ -16,8 +16,8 @@ Object.defineProperties(exports, {
   ViewController: {get: function() {
       return ViewController;
     }},
-  registerGlobalStore: {get: function() {
-      return registerGlobalStore;
+  registerGlobalStoreController: {get: function() {
+      return registerGlobalStoreController;
     }},
   getGlobalData: {get: function() {
       return getGlobalData;
@@ -190,20 +190,20 @@ var ViewController = function ViewController() {};
 var currentStoreController = null;
 var currentViewController = null;
 var currentLinkController = null;
-var globalStore = null;
+var globalStoreController = null;
 var routes = {};
-function registerGlobalStore(store) {
-  if (!(store instanceof Store)) {
-    throw new Error('Invalid global store');
+function registerGlobalStoreController(storeController) {
+  if (!(store instanceof StoreController)) {
+    throw new Error('Invalid global store controller');
   }
-  globalStore = store;
+  globalStoreController = storeController;
   store.onConnected();
 }
 function getGlobalData() {
-  if (!globalStore) {
-    throw new Error('No global store set');
+  if (!globalStoreController) {
+    throw new Error('No global store controller set');
   }
-  return globalStore.render();
+  return globalStoreController.render();
 }
 function aggregate() {
   if (!currentViewController) {

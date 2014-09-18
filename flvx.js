@@ -122,22 +122,22 @@ export class ViewController {
 let currentStoreController = null;
 let currentViewController = null;
 let currentLinkController = null;
-let globalStore = null;
+let globalStoreController = null;
 let routes = {};
 
-export function registerGlobalStore(store) {
-  if (!(store instanceof Store)) {
-    throw new Error('Invalid global store');
+export function registerGlobalStoreController(storeController) {
+  if (!(store instanceof StoreController)) {
+    throw new Error('Invalid global store controller');
   }
-  globalStore = store;
+  globalStoreController = storeController;
   store.onConnected();
 }
 
 export function getGlobalData() {
-  if (!globalStore) {
-    throw new Error('No global store set');
+  if (!globalStoreController) {
+    throw new Error('No global store controller set');
   }
-  return globalStore.render();
+  return globalStoreController.render();
 }
 
 export function aggregate() {

@@ -201,9 +201,4 @@ export function route(name, state) {
   if (currentLinkController) {
     currentLinkController[internalOnConnected]();
   }
-
-  dispatch({
-    type: 'routed',
-    route: name
-  });
 }

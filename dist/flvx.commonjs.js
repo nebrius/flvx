@@ -260,8 +260,4 @@ function route(name, state) {
   if (currentLinkController) {
     currentLinkController[$traceurRuntime.toProperty(internalOnConnected)]();
   }
-  dispatch({
-    type: 'routed',
-    route: name
-  });
 }

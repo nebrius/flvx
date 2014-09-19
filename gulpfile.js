@@ -24,6 +24,7 @@ THE SOFTWARE.
 
 var gulp = require('gulp');
 var traceur = require('gulp-traceur');
+var sourcemaps = require('gulp-sourcemaps');
 var uglify = require('gulp-uglify');
 var rename = require("gulp-rename");
 var del = require('del');
@@ -34,49 +35,57 @@ gulp.task('default', ['clean'], function() {
 
 gulp.task('amd', function() {
   return gulp.src('flvx.js')
-    .pipe(traceur({
-      experimental: true,
-      modules: 'amd'
-    }))
-    .pipe(rename(function (path) {
-        path.extname = '.amd.js';
-    }))
+    .pipe(sourcemaps.init())
+      .pipe(traceur({
+        experimental: true,
+        modules: 'amd'
+      }))
+      .pipe(rename(function (path) {
+          path.extname = '.amd.js';
+      }))
+    .pipe(sourcemaps.write('maps'))
     .pipe(gulp.dest('dist'));
 });
 
 gulp.task('amd-min', function() {
   return gulp.src('flvx.js')
-    .pipe(traceur({
-      experimental: true,
-      modules: 'amd'
-    }))
-    .pipe(uglify())
-    .pipe(rename(function (path) {
-        path.extname = '.amd.min.js';
-    }))
+    .pipe(sourcemaps.init())
+      .pipe(traceur({
+        experimental: true,
+        modules: 'amd'
+      }))
+      .pipe(uglify())
+      .pipe(rename(function (path) {
+          path.extname = '.amd.min.js';
+      }))
+    .pipe(sourcemaps.write('maps'))
     .pipe(gulp.dest('dist'));
 });
 
 gulp.task('commonjs', function() {
   return gulp.src('flvx.js')
-    .pipe(traceur({
-      experimental: true
-    }))
-    .pipe(rename(function (path) {
-        path.extname = '.commonjs.js';
-    }))
+    .pipe(sourcemaps.init())
+      .pipe(traceur({
+        experimental: true
+      }))
+      .pipe(rename(function (path) {
+          path.extname = '.commonjs.js';
+      }))
+    .pipe(sourcemaps.write('maps'))
     .pipe(gulp.dest('dist'));
 });
 
 gulp.task('commonjs-min', function() {
   return gulp.src('flvx.js')
-    .pipe(traceur({
-      experimental: true
-    }))
-    .pipe(uglify())
-    .pipe(rename(function (path) {
-        path.extname = '.commonjs.min.js';
-    }))
+    .pipe(sourcemaps.init())
+      .pipe(traceur({
+        experimental: true
+      }))
+      .pipe(uglify())
+      .pipe(rename(function (path) {
+          path.extname = '.commonjs.min.js';
+      }))
+    .pipe(sourcemaps.write('maps'))
     .pipe(gulp.dest('dist'));
 });
 
@@ -100,5 +109,5 @@ gulp.task('js', function() {
 });
 
 gulp.task('clean', function(cb) {
-  del(['dist'], cb);
+  del(['dist', 'example-dist'], cb);
 });

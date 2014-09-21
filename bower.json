@@ -3,7 +3,7 @@
   "main": [
     "flvx.js"
   ],
-  "version": "1.0.1",
+  "version": "1.0.0",
   "authors": [
     "Bryan Hughes <bryan@theoreticalideations.com>"
   ],
@@ -20,6 +20,12 @@
   "license": "MIT",
   "homepage": "https://gitlab.theoreticalideations.com/nebrius/flvx/tree/master",
   "ignore": [
-    "!flvx.js"
+    "**/.*",
+    "dist",
+    "example",
+    "example-dist",
+    "node_modules",
+    ".gitignore",
+    "package.json"
   ]
 }

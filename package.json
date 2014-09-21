@@ -1,6 +1,6 @@
 {
   "name": "flvx",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A lightweight web framework based on Facebook's Flux paradigm",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

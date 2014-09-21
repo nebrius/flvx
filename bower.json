@@ -20,6 +20,6 @@
   "license": "MIT",
   "homepage": "https://gitlab.theoreticalideations.com/nebrius/flvx/tree/master",
   "ignore": [
-    "./!(flvx.js)"
+    "!flvx.js"
   ]
 }

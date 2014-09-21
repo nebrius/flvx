@@ -1,0 +1,31 @@
+{
+  "name": "flvx",
+  "main": [
+    "flvx.js",
+    "dist/flvx.amd.min.js"
+  ],
+  "version": "1.0.0",
+  "authors": [
+    "Bryan Hughes <bryan@theoreticalideations.com>"
+  ],
+  "description": "A lightweight web framework based on Facebook's Flux paradigm",
+  "moduleType": [
+    "es6",
+    "amd"
+  ],
+  "keywords": [
+    "react",
+    "flux",
+    "es6",
+    "unidirectional data flow"
+  ],
+  "license": "MIT",
+  "homepage": "https://gitlab.theoreticalideations.com/nebrius/flvx/tree/master",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

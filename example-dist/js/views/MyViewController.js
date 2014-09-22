@@ -1,4 +1,4 @@
-define(['react', 'flvx', 'views/MyView'], function($__0,$__2,$__4) {
+define(['react', 'flvx', 'views/my_view/MyView'], function($__0,$__2,$__4) {
   "use strict";
   if (!$__0 || !$__0.__esModule)
     $__0 = {default: $__0};

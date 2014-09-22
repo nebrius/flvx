@@ -1,4 +1,4 @@
-define(['flvx', 'store_controllers/MyStoreController', 'view_controllers/MyViewController'], function($__0,$__2,$__4) {
+define(['flvx', 'stores/MyStoreController', 'views/MyViewController'], function($__0,$__2,$__4) {
   "use strict";
   if (!$__0 || !$__0.__esModule)
     $__0 = {default: $__0};

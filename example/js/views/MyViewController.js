@@ -22,19 +22,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-import { StoreController } from 'flvx';
-import { MyStore } from 'stores/MyStore';
+import React from 'react';
+import { ViewController } from 'flvx';
+import { MyView } from 'views/my_view/MyView';
 
-let store = Symbol();
-
-export class MyStoreController extends StoreController {
-
-  constructor() {
-    this.register(this[store] = new MyStore());
+export class MyViewController extends ViewController {
+  render(data) {
+    React.renderComponent(new MyView(data), document.getElementById('content'));
   }
-
-  render() {
-    return this[store].render();
-  }
-
 }

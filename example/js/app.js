@@ -23,8 +23,8 @@ THE SOFTWARE.
 */
 
 import { registerRoute, route } from 'flvx';
-import { MyStoreController } from 'store_controllers/MyStoreController';
-import { MyViewController } from 'view_controllers/MyViewController';
+import { MyStoreController } from 'stores/MyStoreController';
+import { MyViewController } from 'views/MyViewController';
 
 registerRoute('myroute', {
   storeController: new MyStoreController(),

@@ -1,4 +1,4 @@
-define(['flvx', 'stores/MyStore'], function($__0,$__2) {
+define(['flvx', 'stores/my_store/MyStore'], function($__0,$__2) {
   "use strict";
   if (!$__0 || !$__0.__esModule)
     $__0 = {default: $__0};

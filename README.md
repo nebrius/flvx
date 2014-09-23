@@ -71,7 +71,7 @@ myapp
 │   └── my_view
 │       ├── MyView.js
 │       └── ...
-├── app.js
+└── app.js
 ```
 
 For each category (links, stores, and views), it is typical to put the controllers in the root directory and to put all
@@ -106,18 +106,18 @@ You can register as many routes as you want to, but note that only a single rout
 ## View Controllers
 
 A view controller is an ECMAScript 6 class that extends the ```ViewController``` base class in the Flvx library.
-Each view controller must consist of a single instance method called ```render```. This method is where you call
-```React.renderComponent```, which attaches a view to the DOM. An example view controller looks like:
 
 ```JavaScript
-import React from 'react';
 import { ViewController } from 'flvx';
 import { MyView } from 'views/my_view/MyView';
+import React from 'react';
 
 export class MyViewController extends ViewController {
+
   render(data) {
     React.renderComponent(new MyView(data), document.getElementById('content'));
   }
+  
 }
 ```
 
@@ -126,15 +126,23 @@ it may be necessary to display different views depending on the contents of the 
 cases such as these, you can import multiple views and determine which one to display based on a conditional in the
 render method here.
 
+### Class Methods
+
+#### [void] render([primitive|object|array] data) _required_
+
+The render method is passed data from the aggregator and is responsible for calling ```React.renderComponent```, which
+attaches a view to the DOM.
+
 ## Views
 
 A view is simply a standard React view, e.g.:
 
 ```JavaScript
-import React from 'react';
 import { dispatch } from 'flvx';
+import React from 'react';
 
 export let MyView = React.createClass({
+
   render() {
     return new React.DOM.div({
       onClick: () => {
@@ -145,35 +153,212 @@ export let MyView = React.createClass({
       className: 'message'
     }, this.props.message);
   }
+  
 });
-
 ```
 
-Here we introduce the concept of dispatching actions. An action can be thought of as an event that is triggered by a view
-or a link. Actions are dispatched to all links and stores. An action is an object that contains a ```type``` property
+In this
+example, we introduce the concept of dispatching actions. An action can be thought of as an event that is triggered by a
+view or a link. Actions are dispatched to all links and stores. An action is an object that contains a ```type``` property
 that indicates the type of action and can optionally contain other properties with data about the action.
+
+### Class Methods
+
+For more information on views and the methods they support, check out Facebook's documentation on
+[React](http://facebook.github.io/react/). 
 
 ## Store Controllers
 
-Coming Soon!
+A store controller is an ECMAScript 6 class that extends the ```StoreController``` base class in the Flvx library.
+
+```JavaScript
+import { StoreController } from 'flvx';
+import { MyStore } from 'stores/my_store/MyStore';
+
+let store = Symbol();
+
+export class MyStoreController extends StoreController {
+
+  onConnected() {
+    this.register(this[store] = new MyStore());
+  }
+
+  render() {
+    return this[store].render();
+  }
+
+}
+```
+
+Store controllers are responsible for instantiating and registering stores, and for managing the render process.
+
+Here, _render_ means to take a snapshot of the state contained in the store. When a store or store controller renders
+data, it takes all of the state stored inside of it, and returns a simple object (i.e. JSON-serializable) representing
+that state. This method is analogous to a Backbone model's ```toJSON``` method. The ```render``` method is called as
+part of aggregating data to views. The aggregator takes the object returned from ```render``` and passes it directly
+to the active view controller's ```render``` method.
+
+Store controllers are responsible for instantiating all stores for the given route. When a store is instantiated, it
+needs to be registered using the ```register``` method exposed by the ```StoreController``` base class. When a store is
+registered by a store controller or another store, it gets wired up to automatically receive dispatched actions. An action
+is dispatched to the controller first, and then descends down the tree formed by registering stores in a pre-order
+traversal. Dependencies between stores are implicit in the order they are registered
+
+### Class Methods
+
+#### [primitive|object|array] render() _required_
+
+Renders the state of the store controller and returns it as a JSON-serializable type.
+
+#### [void] dispatch([object] action) _optional_
+
+Receives actions dispatched by the dispatcher. An action is an object with, at minimum, a ```type``` property that
+indicates the type of action. Actions can optionally contain more data about the action. Actions can originate from
+views or links.
+
+#### [void] onConnected() _optional_
+
+Called when the store controller is connected. A store controller is connected when the route containing the store
+controller is routed to.
+
+#### [void] onDisconnected() _optional_
+
+Called when the store controller is disconnected. A store controller is disconnected when a new route is routed to after
+having previously routed to the route containing the store controller. Note that if a store controller is registered
+for two or more routes, and you route between them, that the ```onDisconnected``` and ```onConnected``` methods are still
+called.
 
 ## Stores
 
-Coming Soon!
+A store has the same signature as a store controller, except that it cannot be passed to a router, and is not called
+directly by the dispatcher.
+
+```JavaScript
+import { Store, aggregate } from 'flvx';
+
+let MESSAGES = ['Hello (click me)', 'Salut', 'Hola', 'Hallo', 'Привет', '你好', 'こんにちは'];
+let currentMessage = Symbol();
+
+export class MyStore extends Store {
+
+  dispatch(action) {
+    switch(action.type) {
+      case 'REQUEST_NEW_MESSAGE':
+        this[currentMessage]++;
+        if (this[currentMessage] == MESSAGES.length) {
+          this[currentMessage] = 0;
+        }
+        aggregate();
+        break;
+    }
+  }
+
+  render() {
+    return {
+      message: MESSAGES[this[currentMessage]]
+    };
+  }
+
+  onConnected() {
+    this[currentMessage] = 0;
+    aggregate();
+  }
+
+}
+```
+
+### Class Methods
+
+#### [primitive|object|array] render() _required_
+
+Renders the state of the store and returns it as a JSON-serializable type.
+
+#### [void] dispatch([object] action) _optional_
+
+Receives actions dispatched by the dispatcher. An action is an object with, at minimum, a ```type``` property that
+indicates the type of action. Actions can optionally contain more data about the action. Actions can originate from
+views or links.
+
+#### [void] onConnected() _optional_
+
+Called when the store is connected. A store is connected when it is registered with a store controller or parent store.
+
+#### [void] onDisconnected() _optional_
+
+Called when the store is disconnected. A store is disconnected when its parent is disconnected. The parent's
+```onDisconnected``` method is called before the child's ```onDisconnected``` method is called.
 
 ## Link Controllers
 
-Coming Soon!
+Link controllers are essentially identical to store controllers, except that they are intended to manage connections
+to a server, not store state. The key difference is that links can dispatch actions, but do not render data.
+
+```JavaScript
+import { LinkController } from 'flvx';
+import { MyLink } from 'links/my_link/MyLink';
+
+let link = Symbol();
+
+export class MyLinkController extends LinkController {
+
+  onConnected() {
+    this.register(this[link] = new MyLink());
+  }
+
+}
+```
+
+### Class Methods
+
+#### [void] dispatch([object] action) _optional_
+
+Receives actions dispatched by the dispatcher. An action is an object with, at minimum, a ```type``` property that
+indicates the type of action. Actions can optionally contain more data about the action. Actions can originate from
+views or links.
+
+#### [void] onConnected() _optional_
+
+Called when the link controller is connected. A link controller is connected when the route containing the link
+controller is routed to.
+
+#### [void] onDisconnected() _optional_
+
+Called when the link controller is disconnected. A link controller is disconnected when a new route is routed to after
+having previously routed to the route containing the link controller. Note that if a link controller is registered
+for two or more routes, and you route between them, that the ```onDisconnected``` and ```onConnected``` methods are still
+called.
 
 ## Links
 
-Coming Soon!
+A link has the same signature as a link controller, except that it cannot be passed to a router, and is not called
+directly by the dispatcher.
+
+```JavaScript
+import { Link, aggregate } from 'flvx';
+
+export class MyLink extends Link {
+
+  dispatch(action) {
+    switch(action.type) {
+      case 'REQUEST_NEW_MESSAGE':
+        // Fictional XHR helper
+        xhr('POST', 'stats', {
+          action: 'messageRequested'
+        });
+        break;
+    }
+  }
+
+}
+```
 
 # Example
 
-Check out the [example](example) directory. Note that everything is written in ECMAScript 6, and compiled back to ECMAScript 5
-using [Traceur](https://github.com/google/traceur-compiler/wiki/GettingStarted) and [Gulp](http://gulpjs.com/).
-A built version of the example, ready to be loaded in a browser, is available in the [example-dist](example-dist) directory.
+Check out the [example](example) directory to see the above examples (minus links) working together. Note that everything
+is written in ECMAScript 6, and compiled back to ECMAScript 5 using
+[Traceur](https://github.com/google/traceur-compiler/wiki/GettingStarted) and [Gulp](http://gulpjs.com/). A built version
+of the example, ready to be loaded in a browser, is available in the [example-dist](example-dist) directory. For a 
+larger example, take a look at the [SChat](https://gitlab.theoreticalideations.com/nebrius/schat/tree/master) app I wrote.
 
 License
 =======

@@ -5,11 +5,12 @@ define(['flvx'], function($__0) {
   var $__1 = $__0,
       Store = $__1.Store,
       aggregate = $__1.aggregate;
-  var MESSAGES = ['Hello', 'Salut', 'Hola', 'Hallo', 'Привет', '你好', 'こんにちは'];
+  var MESSAGES = ['Hello (click me)', 'Salut', 'Hola', 'Hallo', 'Привет', '你好', 'こんにちは'];
   var currentMessage = Symbol();
   var MyStore = function MyStore() {
-    $traceurRuntime.setProperty(this, currentMessage, 0);
+    $traceurRuntime.defaultSuperCall(this, $MyStore.prototype, arguments);
   };
+  var $MyStore = MyStore;
   ($traceurRuntime.createClass)(MyStore, {
     dispatch: function(action) {
       switch (action.type) {
@@ -26,6 +27,7 @@ define(['flvx'], function($__0) {
       return {message: MESSAGES[$traceurRuntime.toProperty(this[$traceurRuntime.toProperty(currentMessage)])]};
     },
     onConnected: function() {
+      $traceurRuntime.setProperty(this, currentMessage, 0);
       aggregate();
     }
   }, {}, Store);

@@ -8,11 +8,17 @@ define(['flvx', 'stores/my_store/MyStore'], function($__0,$__2) {
   var MyStore = $__2.MyStore;
   var store = Symbol();
   var MyStoreController = function MyStoreController() {
-    this.register($traceurRuntime.setProperty(this, store, new MyStore()));
+    $traceurRuntime.defaultSuperCall(this, $MyStoreController.prototype, arguments);
   };
-  ($traceurRuntime.createClass)(MyStoreController, {render: function() {
+  var $MyStoreController = MyStoreController;
+  ($traceurRuntime.createClass)(MyStoreController, {
+    onConnected: function() {
+      this.register($traceurRuntime.setProperty(this, store, new MyStore()));
+    },
+    render: function() {
       return this[$traceurRuntime.toProperty(store)].render();
-    }}, {}, StoreController);
+    }
+  }, {}, StoreController);
   return {
     get MyStoreController() {
       return MyStoreController;

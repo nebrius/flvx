@@ -29,7 +29,7 @@ let store = Symbol();
 
 export class MyStoreController extends StoreController {
 
-  constructor() {
+  onConnected() {
     this.register(this[store] = new MyStore());
   }
 

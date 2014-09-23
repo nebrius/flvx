@@ -24,14 +24,10 @@ THE SOFTWARE.
 
 import { Store, aggregate } from 'flvx';
 
-let MESSAGES = ['Hello', 'Salut', 'Hola', 'Hallo', 'Привет', '你好', 'こんにちは'];
+let MESSAGES = ['Hello (click me)', 'Salut', 'Hola', 'Hallo', 'Привет', '你好', 'こんにちは'];
 let currentMessage = Symbol();
 
 export class MyStore extends Store {
-
-  constructor() {
-    this[currentMessage] = 0;
-  }
 
   dispatch(action) {
     switch(action.type) {
@@ -52,6 +48,7 @@ export class MyStore extends Store {
   }
 
   onConnected() {
+    this[currentMessage] = 0;
     aggregate();
   }
 

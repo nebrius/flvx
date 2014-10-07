@@ -1,16 +1,16 @@
 {
   "name": "flvx",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A lightweight web framework based on Facebook's Flux paradigm",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git@gitlab.theoreticalideations.com:nebrius/flvx.git"
+    "url": "git@github.com:bryan-m-hughes/flvx.git"
   },
-  "homepage": "https://gitlab.theoreticalideations.com/nebrius/flvx/tree/master",
-  "issues": "https://gitlab.theoreticalideations.com/nebrius/flvx/issues",
+  "homepage": "https://github.com/bryan-m-hughes/flvx",
+  "issues": "https://github.com/bryan-m-hughes/flvx/issues",
   "author": "Bryan Hughes <bryan@theoreticalideations.com>",
   "license": "MIT",
   "devDependencies": {

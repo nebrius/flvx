@@ -9,11 +9,11 @@ Flvx modifies the Flux paradigm slightly to give it a little more structure, and
 
 You can download the library in the following formats using the links below:
 
-* [ES6](https://gitlab.theoreticalideations.com/nebrius/flvx/raw/master/flvx.js)
-* [AMD](https://gitlab.theoreticalideations.com/nebrius/flvx/raw/master/dist/flvx.amd.js)
-* [Minified AMD](https://gitlab.theoreticalideations.com/nebrius/flvx/raw/master/dist/flvx.amd.min.js)
-* [CommonJS](https://gitlab.theoreticalideations.com/nebrius/flvx/raw/master/dist/flvx.commonjs.js)
-* [Minified CommonJS](https://gitlab.theoreticalideations.com/nebrius/flvx/raw/master/dist/commonjs.amd.min.js)
+* [ES6](https://raw.githubusercontent.com/bryan-m-hughes/flvx/master/flvx.js)
+* [AMD](https://raw.githubusercontent.com/bryan-m-hughes/flvx/master/flvx.amd.js)
+* [Minified AMD](https://raw.githubusercontent.com/bryan-m-hughes/flvx/master/flvx.amd.min.js)
+* [CommonJS](https://raw.githubusercontent.com/bryan-m-hughes/flvx/master/flvx.commonjs.js)
+* [Minified CommonJS](https://raw.githubusercontent.com/bryan-m-hughes/flvx/master/commonjs.amd.min.js)
 
 Alternatively, you can use bower to install the ES6 version of the code:
 
@@ -312,7 +312,7 @@ export class MyLink extends Link {
 
 # Example
 
-Check out the [example](example) directory to see the above examples (minus links) working together. Note that everything is written in ECMAScript 6, and compiled back to ECMAScript 5 using [Traceur](https://github.com/google/traceur-compiler/wiki/GettingStarted) and [Gulp](http://gulpjs.com/). A built version of the example, ready to be loaded in a browser, is available in the [example-dist](example-dist) directory. For a larger example, take a look at the [SChat](https://gitlab.theoreticalideations.com/nebrius/schat/tree/master) app I wrote.
+Check out the [example](example) directory to see the above examples (minus links) working together. Note that everything is written in ECMAScript 6, and compiled back to ECMAScript 5 using [Traceur](https://github.com/google/traceur-compiler/wiki/GettingStarted) and [Gulp](http://gulpjs.com/). A built version of the example, ready to be loaded in a browser, is available in the [example-dist](example-dist) directory. For a larger example, take a look at the [SChat](https://github.com/bryan-m-hughes/schat) app I wrote.
 
 License
 =======

@@ -10,10 +10,10 @@ Flvx modifies the Flux paradigm slightly to give it a little more structure, and
 You can download the library in the following formats using the links below:
 
 * [ES6](https://raw.githubusercontent.com/bryan-m-hughes/flvx/master/flvx.js)
-* [AMD](https://raw.githubusercontent.com/bryan-m-hughes/flvx/master/flvx.amd.js)
-* [Minified AMD](https://raw.githubusercontent.com/bryan-m-hughes/flvx/master/flvx.amd.min.js)
-* [CommonJS](https://raw.githubusercontent.com/bryan-m-hughes/flvx/master/flvx.commonjs.js)
-* [Minified CommonJS](https://raw.githubusercontent.com/bryan-m-hughes/flvx/master/commonjs.amd.min.js)
+* [AMD](https://raw.githubusercontent.com/bryan-m-hughes/flvx/master/dist/flvx.amd.js)
+* [Minified AMD](https://raw.githubusercontent.com/bryan-m-hughes/flvx/master/dist/flvx.amd.min.js)
+* [CommonJS](https://raw.githubusercontent.com/bryan-m-hughes/flvx/master/dist/flvx.commonjs.js)
+* [Minified CommonJS](https://raw.githubusercontent.com/bryan-m-hughes/flvx/master/dist/commonjs.amd.min.js)
 
 Alternatively, you can use bower to install the ES6 version of the code:
 

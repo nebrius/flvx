@@ -13,7 +13,7 @@ You can download the library in the following formats using the links below:
 * [AMD](https://raw.githubusercontent.com/bryan-m-hughes/flvx/master/dist/flvx.amd.js)
 * [Minified AMD](https://raw.githubusercontent.com/bryan-m-hughes/flvx/master/dist/flvx.amd.min.js)
 * [CommonJS](https://raw.githubusercontent.com/bryan-m-hughes/flvx/master/dist/flvx.commonjs.js)
-* [Minified CommonJS](https://raw.githubusercontent.com/bryan-m-hughes/flvx/master/dist/commonjs.amd.min.js)
+* [Minified CommonJS](https://raw.githubusercontent.com/bryan-m-hughes/flvx/master/dist/flvx.commonjs.min.js)
 
 Alternatively, you can use bower to install the ES6 version of the code:
 

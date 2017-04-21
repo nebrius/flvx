@@ -1,6 +1,10 @@
 Flvx
 ====
 
+[![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
+
+_Note:_ I started this as an experiment to see what I could do with the flux concept, but it never really took off, so consider this project abandonware.
+
 A lightweight web framework derived from Facebook's [Flux](http://facebook.github.io/react/docs/flux-overview.html) application architecture and is intended to be used with Facebook's [React](http://facebook.github.io/react/) UI library.
 
 Flvx modifies the Flux paradigm slightly to give it a little more structure, and to help enforce the immutable nature of the Flux philosophy. Flvx is written in ECMAScript 6 and can be used directly, or can be compiled to AMD or CommonJS compatible ECMAScript 5 code.
